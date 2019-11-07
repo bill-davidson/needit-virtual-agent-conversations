@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_cb_topic">
+    <sys_cb_topic action="INSERT_OR_UPDATE">
+        <applicability/>
+        <connect_queue/>
+        <description>Topic to allow users to update Needit records.</description>
+        <graph>{
+  "graph_api_version": "1.0.10",
+  "goals": {
+    "83b53d8f609141c185c03471d5a5b82e": {
+      "id": "83b53d8f609141c185c03471d5a5b82e",
+      "trigger": {
+        "type": "primary"
+      },
+      "name": "primary",
+      "applicability": "",
+      "description": "",
+      "nodes": {
+        "8f286d2f4bb94cdeac304ad2df815701": {
+          "id": "8f286d2f4bb94cdeac304ad2df815701",
+          "stepType": "Start",
+          "name": "Start",
+          "greetingResponse": {
+            "mode": "simple",
+            "value": ""
+          }
+        },
+        "823c7c1e40e245bb9aeec5aaf185ccfb": {
+          "id": "823c7c1e40e245bb9aeec5aaf185ccfb",
+          "stepType": "TerminateGoal",
+          "name": "End",
+          "confirmationMessage": {
+            "mode": "simple",
+            "value": ""
+          }
+        },
+        "9cf0274437004dd0b8c29e4714f40736": {
+          "stepType": "ChoicePrompt",
+          "name": "NeedIt Type",
+          "prompt": {
+            "value": "What type of NeedIt record would you like to view?",
+            "mode": "simple"
+          },
+          "confirmMessage": {
+            "value": "",
+            "mode": "simple"
+          },
+          "acknowledgeMsg": {
+            "value": "",
+            "mode": "simple"
+          },
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "optional": false,
+          "defaultValue": {
+            "value": "",
+            "mode": "simple"
+          },
+          "variableId": "02def6934946441886f6a9f494c66804",
+          "id": "9cf0274437004dd0b8c29e4714f40736"
+        },
+        "8d1c21099e6d45ee9dfa0cdb2cae934d": {
+          "stepType": "ReferenceChoicePrompt",
+          "name": "NeedIt List",
+          "prompt": {
+            "value": "Select a NeedIt record to view",
+            "mode": "simple"
+          },
+          "confirmMessage": {
+            "value": "",
+            "mode": "simple"
+          },
+          "acknowledgeMsg": {
+            "value": "",
+            "mode": "simple"
+          },
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "optional": false,
+          "defaultValue": {
+            "value": "",
+            "mode": "simple"
+          },
+          "variableId": "69b37bdfba664f6390c49c0a6ed93e07",
+          "id": "8d1c21099e6d45ee9dfa0cdb2cae934d",
+          "mode": "glide_record",
+          "script": "",
+          "noRecordsResponseMsg": {
+            "value": "You have no open NeedIt records",
+            "mode": "simple"
+          },
+          "condition": {
+            "mode": "glide_scripted_query",
+            "value": "(function execute(table) {\n\t\n\t    // Initialize an array for the list of NeedIt records to show\n\t    var options = [];\n\t\n\t    // Query the table selected in the Table field for active records with the \n\t    // u_request_type selected in the NeedIt Type node where the user is the \n\t    // u_requested_for.\n\t    var grNI = new GlideRecord(table);\n\t    grNI.addQuery('u_request_type',vaInputs.needit_type.getValue());\n\t    grNI.addQuery('active','true');\n\t    grNI.addQuery('u_requested_for',vaInputs.user);\n\t    grNI.query();\n\t\n\t    // Push a value and label pair to the array for each record the query returns.\n\t    // The value is the unique value. The label is the number and short_description for the\n\t    // NeedIt record.\n\t    while(grNI.next()) {\n\t        options.push({ 'value': grNI.getUniqueValue(), 'label': grNI.getValue('number') + \": \" + grNI.getValue('short_description') });\n\t    }\n\t\n\t    // Return the array\n\t    return options;\n\t\n\t})(table)\n"
+          }
+        },
+        "1abe722b601d496b92aa7918b9a51e1d": {
+          "id": "1abe722b601d496b92aa7918b9a51e1d",
+          "stepType": "TextOutput",
+          "name": "Confirm NeedIt Type",
+          "value": {
+            "value": "(function execute() {\n\t    // Return the display value (Label) for the needit_type choice\n\t    return 'You selected: ' + vaInputs.needit_type.getDisplayValue();\n\t})()",
+            "mode": "script"
+          },
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          }
+        },
+        "01ffea4352514084b1cbb91c0d292a7d": {
+          "id": "01ffea4352514084b1cbb91c0d292a7d",
+          "stepType": "RecordOutput",
+          "name": "NeedIt Card",
+          "variableId": "69b37bdfba664f6390c49c0a6ed93e07",
+          "mode": "variable",
+          "tableName": "x_58872_needit_needit",
+          "fields": [
+            "priority",
+            "short_description",
+            "u_when_needed"
+          ],
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "condition": {
+            "mode": "variable",
+            "value": ""
+          }
+        },
+        "e876bd5cf67e49049d2fc02b1371e2d4": {
+          "id": "e876bd5cf67e49049d2fc02b1371e2d4",
+          "stepType": "Prompt",
+          "name": "Search Again",
+          "prompt": {
+            "value": "Would you like to view another NeedIt Record?",
+            "mode": "simple"
+          },
+          "confirmMessage": {
+            "value": "",
+            "mode": "simple"
+          },
+          "acknowledgeMsg": {
+            "value": "",
+            "mode": "simple"
+          },
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "optional": false,
+          "defaultValue": {
+            "value": "",
+            "mode": "simple"
+          },
+          "variableId": "4c74ec0967984c99991a1652c3828351"
+        },
+        "2d3a1e3f3d9d414ea7ebce17b648e6a9": {
+          "id": "2d3a1e3f3d9d414ea7ebce17b648e6a9",
+          "stepType": "Decision",
+          "name": "Find more NeedIt records?"
+        },
+        "f2f836852c674debbc551889b25ead73": {
+          "id": "f2f836852c674debbc551889b25ead73",
+          "stepType": "Prompt",
+          "name": "New When Needed Date",
+          "prompt": {
+            "value": "When do you need the NeedIt completed?",
+            "mode": "simple"
+          },
+          "confirmMessage": {
+            "value": "",
+            "mode": "simple"
+          },
+          "acknowledgeMsg": {
+            "value": "",
+            "mode": "simple"
+          },
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "optional": false,
+          "defaultValue": {
+            "value": "",
+            "mode": "simple"
+          },
+          "variableId": "2d0e02231c8d45e09fbaecfbcb60a706"
+        },
+        "bf9e8c140b5a4ce6a783d273072bd2a6": {
+          "id": "bf9e8c140b5a4ce6a783d273072bd2a6",
+          "stepType": "CrudAction",
+          "name": "Change When Needed Date",
+          "template": "u_when_needed={{vaInputs.new_when_needed_date}}",
+          "mode": "update",
+          "record": "69b37bdfba664f6390c49c0a6ed93e07",
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "variableId": "115a9c7cfef64aab9e60ff168a7895fd"
+        },
+        "f5f2c7d669e741448772a752221c8f40": {
+          "id": "f5f2c7d669e741448772a752221c8f40",
+          "stepType": "RecordOutput",
+          "name": "Updated NeedIt",
+          "variableId": "69b37bdfba664f6390c49c0a6ed93e07",
+          "mode": "variable",
+          "tableName": "x_58872_needit_needit",
+          "fields": [
+            "priority",
+            "short_description",
+            "u_when_needed"
+          ],
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "condition": {
+            "mode": "variable",
+            "value": ""
+          }
+        },
+        "626d32132fa54096ad2915fc0174365c": {
+          "stepType": "ChoicePrompt",
+          "name": "What to Update",
+          "prompt": {
+            "value": "Would you like to update the record",
+            "mode": "simple"
+          },
+          "confirmMessage": {
+            "value": "",
+            "mode": "simple"
+          },
+          "acknowledgeMsg": {
+            "value": "",
+            "mode": "simple"
+          },
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "optional": false,
+          "defaultValue": {
+            "value": "",
+            "mode": "simple"
+          },
+          "variableId": "3ff25e093758401b984a4f6b384a4540",
+          "id": "626d32132fa54096ad2915fc0174365c"
+        },
+        "6b784d7344894402aab1135fd5968ade": {
+          "id": "6b784d7344894402aab1135fd5968ade",
+          "stepType": "Decision",
+          "name": "Decision"
+        },
+        "5e73feb507aa4dcea8d1ffa38b11f9a9": {
+          "id": "5e73feb507aa4dcea8d1ffa38b11f9a9",
+          "stepType": "Prompt",
+          "name": "New Short Descripton",
+          "prompt": {
+            "value": "What is the new Description?",
+            "mode": "simple"
+          },
+          "confirmMessage": {
+            "value": "",
+            "mode": "simple"
+          },
+          "acknowledgeMsg": {
+            "value": "",
+            "mode": "simple"
+          },
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "optional": false,
+          "defaultValue": {
+            "value": "",
+            "mode": "simple"
+          },
+          "variableId": "8f65a12095ce413fbf944c3497815c59"
+        },
+        "af3bfc0979fb4e429629e4973471d936": {
+          "id": "af3bfc0979fb4e429629e4973471d936",
+          "stepType": "CrudAction",
+          "name": "Change Short Description",
+          "template": "short_description={{vaInputs.new_short_descripton}}",
+          "mode": "update",
+          "record": "69b37bdfba664f6390c49c0a6ed93e07",
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "variableId": "f637b66462664bbda0855330bf1a7062"
+        },
+        "8401240e190540e59f3590c836350cd5": {
+          "id": "8401240e190540e59f3590c836350cd5",
+          "stepType": "ScriptOutput",
+          "name": "Update search_count",
+          "output_type": "single_part",
+          "script": "(function execute() {\n\t    // Add 1 to the search_count variable\n\t    vaVars.search_count = vaVars.search_count + 1;\n\t})()\n",
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          }
+        },
+        "0cc5c0c99d72483988bb349bb9ab5bd1": {
+          "id": "0cc5c0c99d72483988bb349bb9ab5bd1",
+          "stepType": "Decision",
+          "name": "Search count value"
+        },
+        "84a7f1ef8b00428ab39bbc51873d5dfd": {
+          "id": "84a7f1ef8b00428ab39bbc51873d5dfd",
+          "stepType": "TextOutput",
+          "name": "Quota Reached",
+          "value": {
+            "value": "(function execute() {\n\t    // If Live Chat is available, inform users they will be transfered to a live agent\n\t    // otherwise, let them know how to work with more NeedIt records\n\t    if (vaSystem.isLiveAgentAvailable()){\n\t        return 'You have reached your NeedIt search quota. I will transfer you to a live agent for assistance.'\n\t    } else {\n\t        return 'You have reached your NeedIt search quota. If you need to work with multiple NeedIt records, open NeedIt &gt; My NeedIt Requests.'\n\t    }\n\t})()\n",
+            "mode": "script"
+          },
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          }
+        },
+        "5d1abda23a7d4f2e8cab2e5e6573932a": {
+          "id": "5d1abda23a7d4f2e8cab2e5e6573932a",
+          "name": "Transfer to Agent",
+          "script": "(function execute() {\n\t    // Transfer to a live agent\n\t    vaSystem.connectToAgent()\n\t})()",
+          "stepType": "ScriptAction",
+          "applicability": {
+            "mode": "script",
+            "value": "(function execute() {\n\t    // If Live Chat is available, return true\n\t    // otherwise, return false\n\t    if (vaSystem.isLiveAgentAvailable()){\n\t        return true;\n\t    } else {\n\t        return false;\n\t    }\n\t})()"
+          }
+        }
+      },
+      "edges": [
+        {
+          "id": "a13829e60c664c55a8fda1bd11039a4c",
+          "edgeType": "Edge",
+          "source": "8401240e190540e59f3590c836350cd5",
+          "target": "0cc5c0c99d72483988bb349bb9ab5bd1",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "e5f35e132ea84d2e9413c9bc9938dc9e",
+          "edgeType": "Branch",
+          "source": "2d3a1e3f3d9d414ea7ebce17b648e6a9",
+          "target": "8401240e190540e59f3590c836350cd5",
+          "sourcePort": "",
+          "targetPort": "",
+          "expression": {
+            "value": "search_again=true",
+            "mode": "query"
+          },
+          "label": "yes"
+        },
+        {
+          "id": "9e7deeab5fe54acf8b729ec93d5f573a",
+          "edgeType": "Edge",
+          "source": "f5f2c7d669e741448772a752221c8f40",
+          "target": "e876bd5cf67e49049d2fc02b1371e2d4",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "8d8934f3d35c410abbffb42f39ed210c",
+          "edgeType": "Edge",
+          "source": "f2f836852c674debbc551889b25ead73",
+          "target": "bf9e8c140b5a4ce6a783d273072bd2a6",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "87a6c60ee6424beaa0f8392ea0c719df",
+          "edgeType": "Edge",
+          "source": "8f286d2f4bb94cdeac304ad2df815701",
+          "target": "9cf0274437004dd0b8c29e4714f40736",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "9479434eeee5412296efb01450a59285",
+          "edgeType": "Edge",
+          "source": "9cf0274437004dd0b8c29e4714f40736",
+          "target": "1abe722b601d496b92aa7918b9a51e1d",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "0fff0cd0566f4da6a4d05abc030a32a2",
+          "edgeType": "Edge",
+          "source": "1abe722b601d496b92aa7918b9a51e1d",
+          "target": "8d1c21099e6d45ee9dfa0cdb2cae934d",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "0e9c4c4223dd448792f0e63d6d30945b",
+          "edgeType": "Edge",
+          "source": "8d1c21099e6d45ee9dfa0cdb2cae934d",
+          "target": "01ffea4352514084b1cbb91c0d292a7d",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "0145ef449aa143099fd87054a46e2bef",
+          "edgeType": "Edge",
+          "source": "e876bd5cf67e49049d2fc02b1371e2d4",
+          "target": "2d3a1e3f3d9d414ea7ebce17b648e6a9",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "3f2c6275720d4afdbc09f09a1e68cd93",
+          "edgeType": "Branch",
+          "source": "2d3a1e3f3d9d414ea7ebce17b648e6a9",
+          "target": "823c7c1e40e245bb9aeec5aaf185ccfb",
+          "sourcePort": "",
+          "targetPort": "",
+          "expression": {
+            "value": "search_again=",
+            "mode": "query"
+          },
+          "label": "No"
+        },
+        {
+          "id": "b3084f8133df4a89a3c05e5a0ced318a",
+          "edgeType": "Edge",
+          "source": "bf9e8c140b5a4ce6a783d273072bd2a6",
+          "target": "f5f2c7d669e741448772a752221c8f40",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "be22aa3ab0d54c68ade7d87716ff4715",
+          "edgeType": "Edge",
+          "source": "01ffea4352514084b1cbb91c0d292a7d",
+          "target": "626d32132fa54096ad2915fc0174365c",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "8187de8b78434ddab2afdbde2a23a95f",
+          "edgeType": "Edge",
+          "source": "626d32132fa54096ad2915fc0174365c",
+          "target": "6b784d7344894402aab1135fd5968ade",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "de19c21ef89f462f8887b32430ba5b41",
+          "edgeType": "Branch",
+          "source": "6b784d7344894402aab1135fd5968ade",
+          "target": "f2f836852c674debbc551889b25ead73",
+          "sourcePort": "",
+          "targetPort": "",
+          "expression": {
+            "value": "what_to_update=When Needed",
+            "mode": "query"
+          },
+          "label": "When Needed Date"
+        },
+        {
+          "id": "691e8176aabe4978af7cf65418dfaca4",
+          "edgeType": "Branch",
+          "source": "6b784d7344894402aab1135fd5968ade",
+          "target": "e876bd5cf67e49049d2fc02b1371e2d4",
+          "sourcePort": "",
+          "targetPort": "",
+          "expression": {
+            "value": "what_to_update=Nothing",
+            "mode": "query"
+          },
+          "label": "Nothing"
+        },
+        {
+          "id": "9a47d42df0884a259cfa1941c8683f78",
+          "edgeType": "Branch",
+          "source": "6b784d7344894402aab1135fd5968ade",
+          "target": "5e73feb507aa4dcea8d1ffa38b11f9a9",
+          "sourcePort": "",
+          "targetPort": "",
+          "expression": {
+            "value": "what_to_update=Short Description",
+            "mode": "query"
+          },
+          "label": "Short Description"
+        },
+        {
+          "id": "6fe2adb68da04660aea51bc86e125c32",
+          "edgeType": "Edge",
+          "source": "5e73feb507aa4dcea8d1ffa38b11f9a9",
+          "target": "af3bfc0979fb4e429629e4973471d936",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "a2e6975fc2db47b4ae90bfc0786af610",
+          "edgeType": "Edge",
+          "source": "af3bfc0979fb4e429629e4973471d936",
+          "target": "f5f2c7d669e741448772a752221c8f40",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "0eff46f4313049e68505ba490fbc0a5a",
+          "edgeType": "Branch",
+          "source": "0cc5c0c99d72483988bb349bb9ab5bd1",
+          "target": "9cf0274437004dd0b8c29e4714f40736",
+          "sourcePort": "",
+          "targetPort": "",
+          "expression": {
+            "mode": "script",
+            "value": "(function execute() {\n\t    // If the value of search_count is less than 3, return true\n\t    // otherwise, return false\n\t    if (vaVars.search_count &lt; 3)\n\t        return true;\n\t    else\n\t        return false;\n\t})()\n"
+          },
+          "label": "less than three"
+        },
+        {
+          "id": "3b40e899d2994aba9beab6c7c1c544e1",
+          "edgeType": "Branch",
+          "source": "0cc5c0c99d72483988bb349bb9ab5bd1",
+          "target": "84a7f1ef8b00428ab39bbc51873d5dfd",
+          "sourcePort": "",
+          "targetPort": "",
+          "expression": {
+            "mode": "script",
+            "value": "(function execute() {\n\t    // If the value of search_count is greater than or equal to 3, return true\n\t    // otherwise, return false\n\t    if (vaVars.search_count &lt; 3)\n\t        return false;\n\t    else\n\t        return true;\n\t})()\n"
+          },
+          "label": "3 or more"
+        },
+        {
+          "id": "cec406cdc407421bb4cfe42db677fc95",
+          "edgeType": "Edge",
+          "source": "84a7f1ef8b00428ab39bbc51873d5dfd",
+          "target": "5d1abda23a7d4f2e8cab2e5e6573932a",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "d2defb78e6e34ae0a37bfd88db2b3fa7",
+          "edgeType": "Edge",
+          "source": "5d1abda23a7d4f2e8cab2e5e6573932a",
+          "target": "823c7c1e40e245bb9aeec5aaf185ccfb",
+          "sourcePort": "",
+          "targetPort": ""
+        }
+      ]
+    }
+  },
+  "variables": {
+    "02def6934946441886f6a9f494c66804": {
+      "id": "02def6934946441886f6a9f494c66804",
+      "name": "needit_type",
+      "label": "NeedIt Type",
+      "varType": "choice",
+      "choices": [
+        {
+          "label": "Legal",
+          "value": "legal"
+        },
+        {
+          "label": "Facilities",
+          "value": "facilities"
+        },
+        {
+          "label": "Human Resources",
+          "value": "hr"
+        }
+      ],
+      "category": "vaInputs"
+    },
+    "current-user": {
+      "category": "vaInputs",
+      "id": "current-user",
+      "label": "User",
+      "name": "user",
+      "table": "sys_user",
+      "varType": "reference"
+    },
+    "69b37bdfba664f6390c49c0a6ed93e07": {
+      "id": "69b37bdfba664f6390c49c0a6ed93e07",
+      "name": "needit_list",
+      "label": "NeedIt List",
+      "varType": "reference",
+      "table": "x_58872_needit_needit",
+      "category": "vaInputs"
+    },
+    "4c74ec0967984c99991a1652c3828351": {
+      "id": "4c74ec0967984c99991a1652c3828351",
+      "name": "search_again",
+      "label": "Search Again",
+      "varType": "boolean",
+      "category": "vaInputs"
+    },
+    "2d0e02231c8d45e09fbaecfbcb60a706": {
+      "id": "2d0e02231c8d45e09fbaecfbcb60a706",
+      "name": "new_when_needed_date",
+      "label": "New When Needed Date",
+      "varType": "date_time",
+      "category": "vaInputs",
+      "mode": "date_time"
+    },
+    "115a9c7cfef64aab9e60ff168a7895fd": {
+      "id": "115a9c7cfef64aab9e60ff168a7895fd",
+      "name": "change_when_needed_date",
+      "label": "Change When Needed Date",
+      "varType": "reference",
+      "table": "",
+      "inactive": true,
+      "category": "vaInputs"
+    },
+    "3ff25e093758401b984a4f6b384a4540": {
+      "id": "3ff25e093758401b984a4f6b384a4540",
+      "name": "what_to_update",
+      "label": "What To Update",
+      "varType": "choice",
+      "choices": [
+        {
+          "label": "When Needed",
+          "value": "When Needed"
+        },
+        {
+          "label": "Short Description",
+          "value": "Short Description"
+        },
+        {
+          "label": "Nothing",
+          "value": "Nothing"
+        }
+      ],
+      "category": "vaInputs"
+    },
+    "8f65a12095ce413fbf944c3497815c59": {
+      "id": "8f65a12095ce413fbf944c3497815c59",
+      "name": "new_short_descripton",
+      "label": "New Short Descripton",
+      "varType": "string",
+      "category": "vaInputs"
+    },
+    "f637b66462664bbda0855330bf1a7062": {
+      "id": "f637b66462664bbda0855330bf1a7062",
+      "name": "change_short_description",
+      "label": "Change Short Description",
+      "varType": "reference",
+      "table": "",
+      "inactive": true,
+      "category": "vaInputs"
+    },
+    "eaca0a6c48134781ba9065ed2b7c361f": {
+      "id": "eaca0a6c48134781ba9065ed2b7c361f",
+      "value": {
+        "mode": "simple",
+        "value": "0"
+      },
+      "name": "search_count",
+      "label": "search_count",
+      "varType": "script",
+      "category": "vaVars"
+    }
+  }
+}</graph>
+        <key_phrases>Update NeedIt Records,Needit Requests</key_phrases>
+        <live_agent>false</live_agent>
+        <name>Update NeedIt Records</name>
+        <roles/>
+        <sys_class_name>sys_cb_topic</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-11-06 21:08:12</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_id>8b0ba34c4f41401092632f9ca310c70d</sys_id>
+        <sys_mod_count>24</sys_mod_count>
+        <sys_name>Update NeedIt Records</sys_name>
+        <sys_package display_value="NeedIt Virtual Agent Conversations" source="x_418742_needit_vi">d5f923c84f41401092632f9ca310c77d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt Virtual Agent Conversations">d5f923c84f41401092632f9ca310c77d</sys_scope>
+        <sys_update_name>sys_cb_topic_8b0ba34c4f41401092632f9ca310c70d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-11-07 15:09:11</sys_updated_on>
+        <variables/>
+    </sys_cb_topic>
+    <sys_variable_value action="delete_multiple" query="document_key=8b0ba34c4f41401092632f9ca310c70d"/>
+</record_update>
